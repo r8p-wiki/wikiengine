@@ -249,7 +249,7 @@ wiki.use(function(req, res, next) {
 	<body>
 		<h1 id="red">Page Not Found</h1>
 		<p>요청하신 페이지를 찾을 수 없습니다. 주소를 확인하시고 다시 시도해 주세요.</p>
-	<small>Powered by Crypto Engine</small>
+		<small>the seed</small>
 	</body>
 <html>
 	`);
