@@ -900,8 +900,8 @@ function fetchValue(code) {
 	const codes = {
 		username: '사용자 이름',
 		ip: 'IP 주소',
-		password: ver('4.18.6') ? '비밀번호' : '암호',
-		password_check: ver('4.18.6') ? '비밀번호 확인' : '암호 확인',
+		password: ver('4.18.6') ? '비밀번호' : '비밀번호',
+		password_check: ver('4.18.6') ? '비밀번호 확인' : '비밀번호 확인',
 	};
 	
 	return codes[code] || code;
