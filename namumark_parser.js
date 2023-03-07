@@ -957,10 +957,16 @@ module.exports = async function markdown(req, content, discussion = 0, title = '
 						</div>
 					` + data;
 				}
-			} else if(getperm('admin', doc.title)) {
+			} else if(getperm('admin', doc.title) && !getperm('owner', doc.title)) {
 				data = `
 					<div style="border-width: 5px 1px 1px; border-style: solid; border-color: orange gray gray; padding: 10px; margin-bottom: 10px;" onmouseover="this.style.borderTopColor=\'red\';" onmouseout="this.style.borderTopColor=\'orange\';">
 						<span style="font-size:14pt">이 사용자는 특수 권한을 가지고 있습니다.</span>
+					</div>
+				` + data;
+			} else if(getperm('owner', doc.title)) {
+				data = `
+					<div style="border-width: 5px 1px 1px; border-style: solid; border-color: orange gray gray; padding: 10px; margin-bottom: 10px;" onmouseover="this.style.borderTopColor=\'red\';" onmouseout="this.style.borderTopColor=\'orange\';">
+						<span style="font-size:14pt">이 사용자는 ${config.getString('wiki.site_name', '더 시드')}의 소유자 입니다.</span>
 					</div>
 				` + data;
 			}
@@ -1041,7 +1047,7 @@ module.exports = async function markdown(req, content, discussion = 0, title = '
 				</div>
 			` + data;
 		} else if(doc.namespace != '사용자' && !discussion && !flags.includes('preview')) {
-			data = alertBalloon('이 문서는 분류가 되어 있지 않습니다. <a href="/w/분류:분류">분류:분류</a>에서 적절한 분류를 찾아 문서를 분류해주세요!', 'info', true) + data;
+			data = alertBalloon('이 문서는 분류가 되어 있지 않습니다. <a href="/w/분류:분류">분류:분류</a>에서 적절한 분류를 찾아 문서를 분류해주세요!', 'info', false) + data;
 		}
 	}
 	
