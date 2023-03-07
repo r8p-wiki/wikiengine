@@ -14,7 +14,7 @@ const diff = require('../cemerick-jsdifflib.js');
 const cookieParser = require('cookie-parser');
 const child_process = require('child_process');
 const captchapng = require('captchapng');
-
+const multer = require("multer");
 const express = require('express');
 const router = express.Router();
 const hostconfig = require('../hostconfig');
