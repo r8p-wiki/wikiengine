@@ -6,6 +6,8 @@ router.all(/^\/member\/signup$/, async function signupEmailScreen(req, res, next
 	
 	if(islogin(req)) { res.redirect(desturl); return; }
 	
+	if(userblocked(ip_check(req, true))) showError( 'permission_create_account' );
+	
 	var emailfilter = '';
 	if(config.getString('wiki.email_filter_enabled', 'false') == 'true') {
 		emailfilter = `
@@ -56,10 +58,7 @@ router.all(/^\/member\/signup$/, async function signupEmailScreen(req, res, next
 		<form method=post class=signup-form>
 			<div class=form-group>
 				<label>전자우편 주소</label>
-				${hostconfig.disable_email ? `
-					<input type=hidden name=email value="" />
-					<div>비활성화됨</div>
-				` : `<input type=email name=email class=form-control />`}
+				${hostconfig.disable_email ? '' : `<input type=email name=email class=form-control />`}
 				${req.method == 'POST' && !error && duplicate ? (error = err('p', { msg: '해당 이메일로 이미 계정 생성 인증 메일을 보냈습니다.' })) : ''}
 				${req.method == 'POST' && !error && userduplicate ? (error = err('p', { msg: '이메일이 이미 존재합니다.' })) : ''}
 				${req.method == 'POST' && !error && invalidemail ? (error = err('p', { msg: '이메일의 값을 형식에 맞게 입력해주세요.' })) : ''}
@@ -159,13 +158,13 @@ router.all(/^\/member\/signup\/(.*)$/, async function signupScreen(req, res, nex
 			</div>
 
 			<div class=form-group>
-				<label>암호</label>
+				<label>비밀번호</label>
 				<input class=form-control name="password" type="password" />
 				${req.method == 'POST' && !error && !pw.length ? (error = err('p', { code: 'validator_required', tag: 'password' })) : ''}
 			</div>
 
 			<div class=form-group>
-				<label>암호 확인</label>
+				<label>비밀번호 확인</label>
 				<input class=form-control name="password_check" type="password" />
 				${req.method == 'POST' && !error && !pw2.length ? (error = err('p', { code: 'validator_required', tag: 'password_check' })) : ''}
 				${req.method == 'POST' && !error && pw2 != pw ? (error = err('p', { msg: '암호 확인이 올바르지 않습니다.' })) : ''}
