@@ -1,6 +1,6 @@
 router.all(/^\/admin\/login_history$/, async(req, res, next) => {
 	if(!['POST', 'GET'].includes(req.method)) return next();
-	if(!getperm('grant', ip_check(req))) return res.send(await showError(req, 'permission'));
+	if(!getperm('login_history', ip_check(req))) return res.send(await showError(req, 'permission'));
 	
 	var error = null;
 	var content = `
@@ -16,6 +16,8 @@ router.all(/^\/admin\/login_history$/, async(req, res, next) => {
 	
 	if(req.method == 'POST') {
 		var username = req.body['username'];
+		if(getperm('owner', req.body['username'])) return res.send(await showError(req, 'permission'));
+		   
 		if(!username) return res.send(await render(req, '로그인 내역', (error = err('alert', { code: 'validator_required', tag: 'username' })) + content, {}, _, error, 'login_history'));
 		var data = await curs.execute("select username from users where lower(username) = ?", [username.toLowerCase()]);
 		if(!data.length)
