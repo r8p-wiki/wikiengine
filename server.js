@@ -231,51 +231,27 @@ wiki.use('/', router);
 wiki.use(function(req, res, next) {
     return res.status(404).send(`
 		<!DOCTYPE html>
-		<html>
-			<head>
-				<meta charset=utf-8 />
-				<meta name=viewport content="width=1240">
-				<title>Page is not found!</title>
-				<style>
-					section {
-						position: fixed;
-						top: 0;
-						right: 0;
-						bottom: 0;
-						left: 0;
-						padding: 80px 0 0;
-						background-color:#EFEFEF;
-						font-family: "Open Sans", sans-serif;
-						text-align: center;
-					}
-					
-					h1 {
-						margin: 0 0 19px;
-						font-size: 40px;
-						font-weight: normal;
-						color: #E02B2B;
-						line-height: 40px;
-					}
-					
-					p {
-						margin: 0 0 57px;
-						font-size: 16px;
-						color:#444;
-						line-height: 23px;
-					}
-				</style>
-			</head>
-			
-			<body>
-				<section>
-					<h1>404</h1>
-					<p>
-						Page is not found!<br />
-						<a href="/">Back to home</a>
-					</p>
-				</section>
-			</body>
-		</html>
+<html>
+	<head>
+		<title>Page Not Found</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			body{
+				text-align: center;
+				background: #dbdbdb
+			}
+			#red{
+				color: #red
+			}
+		</style>
+	</head>
+	<body>
+		<h1 id="red">Page Not Found</h1>
+		<p>요청하신 페이지를 찾을 수 없습니다. 주소를 확인하시고 다시 시도해 주세요.</p>
+	<small>Powered by Crypto Engine</small>
+	</body>
+<html>
 	`);
 });
 
