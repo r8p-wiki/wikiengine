@@ -873,6 +873,7 @@ function fetchErrorString(code, ...params) {
 		permission_write_thread_comment: '토론 댓글 권한이 부족합니다.',
 		permission_edit_request: '편집요청 권한이 부족합니다.',
 		permission_acl: 'ACL 권한이 부족합니다.',
+		permission_create_account: '계정 생성 권한이 부족합니다.',
 		thread_not_found: '토론이 존재하지 않습니다.',
 		edit_request_not_found: '편집 요청을 찾을 수 없습니다.',
 		invalid_signup_key: '인증 요청이 만료되었거나 올바르지 않습니다.',
@@ -928,7 +929,7 @@ function alertBalloon(content, type = 'danger', dismissible = true, classes = ''
 
 // 이름공간 목록
 function fetchNamespaces() {
-	return ['문서', '틀', '분류', '파일', '사용자', '특수기능', config.getString('wiki.site_name', '더 시드'), '토론', '휴지통', '투표'].concat(hostconfig.custom_namespaces || []);
+	return ['문서', '틀', '분류', '파일', '사용자', config.getString('wiki.site_name', '더 시드'), '휴지통'].concat(hostconfig.custom_namespaces || []);
 }
 
 function err(type, obj) {
