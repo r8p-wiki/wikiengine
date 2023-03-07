@@ -1,4 +1,4 @@
-router.all(/^\/Upload$/, async(req, res, next) => {
+router.all(/^\/Upload$/, upload.single('img'), async(req, res, next) => {
 	if(!['POST', 'GET'].includes(req.method)) return next();
 	
 	const licelst = await curs.execute("select title from documents where namespace = '틀' and title like '이미지 라이선스/%' order by title");
@@ -97,40 +97,19 @@ router.all(/^\/Upload$/, async(req, res, next) => {
 		if(error) break;
 		
 		const response = res;
-		
-		var request = http.request({
-			method: 'POST', 
-			host: hostconfig.image_host,
-			port: hostconfig.image_port,
-			path: '/upload',
-			headers: {
-				'Content-Type': 'application/json',
+		const storage = multer.diskStorage({
+			destination: function (req, file, cb) {
+				cb(null, 'uploads')
 			},
-		}, async res => {
-			var data = '';
-			res.on('data', d => data += d);
-			res.on('end', async () => {
-				data = JSON.parse(data);
-				if(data.status != 'success') {
-					error = err('alert', { code: 'file_not_uploaded' });
-					return response.send(await render(req, '파일 올리기', error + content, {}, _, error, 'upload'));
-				}
-				await curs.execute("insert into files (title, namespace, hash) values (?, ?, ?)", [doc.title, doc.namespace, '']);  // sha224 해시화 필요
-				return response.redirect('/w/' + totitle(doc.title, doc.namespace));
-			});
-		}).on('error', async e => {
-			error = err('alert', { msg: '파일 서버가 사용가능하지 않습니다.' });
-			return res.send(await render(req, '파일 올리기', error + content, {}, _, error, 'upload'));
-		});
-		request.write(JSON.stringify({
-			filename: file.originalname,
-			document: title,
-			mimetype: file.mimetype,
-			file: file.buffer.toString('base64'),
-		}));
-		request.end();
+			filename: function (req, file, cb) {
+				cb(null, sha3(file.fieldname))
+			}
+			const upload = multer({ storage: storage })
+			await curs.execute("insert into files (title, namespace, hash) values (?, ?, ?)", [doc.title, doc.namespace, sha3(file.fieldname)]);
+		return response.redirect('/w/' + totitle(doc.title, doc.namespace));
+});
+
 		
-		return;
 	} while(0);
 	
 	res.send(await render(req, '파일 올리기', content, {}, _, error, 'upload'));
