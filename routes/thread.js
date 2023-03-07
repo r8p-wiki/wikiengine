@@ -235,12 +235,12 @@ router.post(/^\/discuss\/(.*)/, async function createThread(req, res) {
 	if(!req.body['text']) return res.send(await showError(req, { code: 'validator_required', tag: 'text' }));
 	
 	var tnum;
+	const newid = newID();
 	do {
-		tnum = rndval('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 22);
+		tnum = newid;
 		var dd = await curs.execute("select tnum from threads where tnum = ?", [tnum]);
 		if(!dd.length) break;
 	} while(1);
-	const newid = newID();
 	
 	await curs.execute("insert into threads (title, namespace, topic, status, time, tnum, slug) values (?, ?, ?, ?, ?, ?, ?)",
 					[doc.title, doc.namespace, req.body['topic'], 'normal', getTime(), tnum, newid]);
@@ -337,7 +337,7 @@ router.get(ver('4.16.0') ? /^\/thread\/([a-zA-Z0-9]+)$/ : /^\/thread\/([a-zA-Z0-
 		
 		content += `
 		    <form method=post id=thread-status-form>
-        		[ADMIN] 쓰레드 상태 변경
+        		[ADMIN] 스레드 상태 변경
         		<select name=status>${sts}</select>
         		<button id=changeBtn class="d_btn type_blue">변경</button>
         	</form>
@@ -347,7 +347,7 @@ router.get(ver('4.16.0') ? /^\/thread\/([a-zA-Z0-9]+)$/ : /^\/thread\/([a-zA-Z0-
 	if(getperm('update_thread_document', ip_check(req)) && ver('4.4.3')) {
 		content += `
         	<form method=post id=thread-document-form>
-        		[ADMIN] 쓰레드 이동
+        		[ADMIN] 스레드 이동
         		<input type=text name=document value="${doc}">
         		<button id=changeBtn class="d_btn type_blue">변경</button>
         	</form>
@@ -357,7 +357,7 @@ router.get(ver('4.16.0') ? /^\/thread\/([a-zA-Z0-9]+)$/ : /^\/thread\/([a-zA-Z0-
 	if(getperm('update_thread_topic', ip_check(req)) && ver('4.4.3')) {
 		content += `
         	<form method=post id=thread-topic-form>
-        		[ADMIN] 쓰레드 주제 변경
+        		[ADMIN] 레드 주제 변경
         		<input type=text name=topic value="${topic}">
         		<button id=changeBtn class="d_btn type_blue">변경</button>
         	</form>
