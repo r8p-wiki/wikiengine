@@ -1234,7 +1234,7 @@ async function getacl(req, title, namespace, type, getmsg) {
 		r.msg = `${ver('4.7.0') && !r.m1 && !r.m2 ? 'ACL에 허용 규칙이 없기 때문에 ' : ''}${r.m1 && ver('4.7.0') ? r.m1 + '이기 때문에 ' : ''}${acltype[type]} 권한이 부족합니다.${r.m2 && ver('4.7.0') ? ' ' + r.m2.replace(/\sOR\s$/, '') + '(이)여야 합니다. ' : ''}`;
 		if(ver('4.5.9')) r.msg += ` 해당 문서의 <a href="/acl/${encodeURIComponent(totitle(title, namespace) + '')}">ACL 탭</a>을 확인하시기 바랍니다.`;
 		if(type == 'edit' && getmsg != 2)
-			r.msg += ' 대신 <strong><a href="/new_edit_request/' + encodeURIComponent(totitle(title, namespace) + '') + '">편집 요청</a></strong>을 생성하실 수 있습니다.';
+			res.redirect('/new_edit_request/' + encodeURIComponent(totitle(title, namespace) + ''));
 	}
 	return r.msg;  // 거부되었으면 오류 메시지 내용 반환, 허용은 빈 문자열
 }
