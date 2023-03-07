@@ -41,8 +41,8 @@ Array.prototype.remove = function remove(item) {
 // 더 시드 모방 버전 (나중에 config.json에서 불러옴)
 const version = {
 	major: 4,
-	minor: 12,
-	revision: 0,
+	minor: 22,
+	revision: 2,
 };
 
 if(hostconfig.theseed_version) {
