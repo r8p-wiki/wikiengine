@@ -55,23 +55,14 @@ router.all(/^\/member\/signup$/, async function signupEmailScreen(req, res, next
 		${req.method == 'POST' && !error && filteredemail ? (error = err('alert', { msg: '이메일 허용 목록에 있는 이메일이 아닙니다.' })) : ''}
 		${req.method == 'POST' && !error && blockmsg ? (error = err('alert', { msg: blockmsg })) : ''}
 		
-		<form method=post class=signup-form>
-			<div class=form-group>
-				<label>전자우편 주소</label>
-				${hostconfig.disable_email ? '' : `<input type=email name=email class=form-control />`}
-				${req.method == 'POST' && !error && duplicate ? (error = err('p', { msg: '해당 이메일로 이미 계정 생성 인증 메일을 보냈습니다.' })) : ''}
-				${req.method == 'POST' && !error && userduplicate ? (error = err('p', { msg: '이메일이 이미 존재합니다.' })) : ''}
-				${req.method == 'POST' && !error && invalidemail ? (error = err('p', { msg: '이메일의 값을 형식에 맞게 입력해주세요.' })) : ''}
-				${emailfilter}
-			</div>
-			
+		<form method=post class=signup-form>			
 			<p>
 				<strong>가입후 탈퇴는 불가능합니다.</strong>
 			</p>
 		
 			<div class=btns>
 				<button type=reset class="btn btn-secondary">초기화</button>
-				<button type=submit class="btn btn-primary">가입</button>
+				<button type=submit class="btn btn-primary">가입 시작하기</button>
 			</div>
 		</form>
 	`;
@@ -209,6 +200,11 @@ router.all(/^\/member\/signup\/(.*)$/, async function signupScreen(req, res, nex
 		await curs.execute("insert into history (title, namespace, content, rev, time, username, changes, log, iserq, erqnum, advance, ismember) \
 						values (?, '사용자', '', ?, ?, ?, '0', '', '0', '', 'create', 'author')", [
 							id, String(baserev + 1), getTime(), id
+						]);
+		await curs.execute("insert into documents (title, namespace, content) values (?, '사', '')", '#redirect 사용자:'+id);
+		await curs.execute("insert into history (title, namespace, content, rev, time, username, changes, log, iserq, erqnum, advance, ismember) \
+						values (?, '사', '', ?, ?, ?, '0', '', '0', '', 'create', 'author')", [
+							id, String(baserev + 1), '#redirect 사용자:'+id, getTime(), id
 						]);
 		if(!hostconfig.disable_login_history) {
 			await curs.execute("insert into login_history (username, ip) values (?, ?)", [id, ip_check(req, 1)]);
