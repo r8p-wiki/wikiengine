@@ -712,8 +712,7 @@ module.exports = async function markdown(req, content, discussion = 0, title = '
 			data = data.replace(link, '');
 			continue;
 		} if(dest.startsWith('파일:') && !discussion && !notexist) {  // 그림
-			// 나중에 구현할랭
-			data = data.replace(link, '');
+			data = data.replace(link, '<img src="/uploads/'+sha3(html.escape(dest.replace('파일:', '')))+'>');
 			continue;
 		}
 		
