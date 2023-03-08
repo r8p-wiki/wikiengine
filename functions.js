@@ -929,7 +929,7 @@ function alertBalloon(content, type = 'danger', dismissible = true, classes = ''
 
 // 이름공간 목록
 function fetchNamespaces() {
-	return ['문서', '틀', '분류', '파일', '사용자', config.getString('wiki.site_name', '더 시드'), '휴지통'].concat(hostconfig.custom_namespaces || []);
+	return ['문서', '틀', '분류', '파일', '사용자', config.getString('wiki.site_name', '더 시드'), '휴지통', '사'].concat(hostconfig.custom_namespaces || []);
 }
 
 function err(type, obj) {
